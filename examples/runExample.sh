@@ -33,5 +33,5 @@ export CLASSPATH=$CLASSPATH:`ls ./$basedir/../dist/*.jar | tr '\n' ':'`
 
 # echo "INFO: CLASSPATH is $CLASSPATH"
 
-java -classpath $CLASSPATH:$basedir/build $@
+java -classpath $CLASSPATH:$basedir/build "$@"
 

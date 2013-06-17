@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ArrayList;
 
+import java.net.URLEncoder;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -25,6 +27,11 @@ public class Submissions {
     public static final int NEW = 1;
 
     public static final int FRONTPAGE = 0;
+
+    public enum SubmissionType {
+        TEXT, 
+        LINK 
+    };
 
     /**
      * This function returns a list containing the submissions on a given
@@ -89,5 +96,47 @@ public class Submissions {
 
         return submissions;
     }
+
+    /**
+     *
+     * Submit a Submission to a subreddit.
+     *
+     */
+    public static void submit(  User user,
+                                SubmissionType type,
+                                String title, 
+                                String content,
+                                String subreddit ) 
+                                    throws IOException, ParseException {
+
+        title   = URLEncoder.encode(title, "UTF-8");
+        content = URLEncoder.encode(content, "UTF-8");
+        
+        JSONObject ret = Utils.post(
+                "title=" + title + "&" + 
+                (type.equals(SubmissionType.TEXT) ? "text" : "url") + "=" + 
+                    content + "&" +
+                "sr=" + subreddit + "&" +
+                "kind=" +
+                (type.equals(SubmissionType.TEXT) ? "self" : "link" ) + "&" +
+                "uh=" + user.getModhash(),
+            new URL("http://www.reddit.com/api/submit"), 
+            user.getCookie());
+
+        //
+        // DEBUG print the response
+        //
+        // System.out.println("Submission posted.");
+        // System.out.println(Utils.getJSONDebugString(ret));
+
+
+        //
+        // Throw any exceptions if necessary.
+        //
+        Utils.handleResponseErrors(ret);
+
+
+    }
+
 
 }
