@@ -18,9 +18,10 @@ public final class GenerousBot {
 		user.connect();
 
 		for (int i = 0; i < subreddits.length; i++) {
-			for (Submission submission : Submissions
-					.getSubmissions(subreddits[i], Submissions.NEW,
-							Submissions.FRONTPAGE, user)) {
+			for (Submission submission : Submissions.getSubmissions(user, 
+                                                        subreddits[i], 
+                                                        Submissions.NEW) ) {
+
                 // 
                 // TODO fix this
                 //

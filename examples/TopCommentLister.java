@@ -25,10 +25,9 @@ public class TopCommentLister {
         user.connect();
         
         List<Submission> submissions = Submissions.getSubmissions(
-                                                subreddit,
-                                                Submissions.HOT,
-                                                Submissions.FRONTPAGE,
-                                                user);
+                                                        user,
+                                                        subreddit,
+                                                        Submissions.HOT );
 
         for(Submission submission: submissions) {
             System.out.println(submission);

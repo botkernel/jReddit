@@ -23,11 +23,26 @@ import com.omrlnr.jreddit.utils.Utils;
  */
 public class Submissions {
 
-    public static final int HOT = 0;
-    public static final int NEW = 1;
+    // 
+    // Types for retreiving subreddit content
+    //
+    public static final int HOT             = 0;
+    public static final int NEW             = 1;
+    public static final int RISING          = 2;
+    public static final int CONTROVERSIAL   = 3;
+    public static final int TOP             = 4;
 
-    public static final int FRONTPAGE = 0;
+    //
+    // Default limit (returned results per "page" for a list request.)
+    //
+    public static final int DEFAULT_LIMIT   = 25;
 
+    /**
+     *
+     * Used when sibmitting a link or text self post to indicate the
+     * submission type.
+     *
+     */
     public enum SubmissionType {
         TEXT, 
         LINK 
@@ -37,10 +52,37 @@ public class Submissions {
      * This function returns a list containing the submissions on a given
      * subreddit and page. 
      * 
+     * @param user              The user
      * @param subRedditName     The subreddit's name
      * @param type              HOT or NEW and some others to come
-     * @param page              TODO this
+     *
+     * @return The list containing submissions
+     *
+     * @throws IOException      If connection fails
+     * @throws ParseException   If JSON parsing fails
+     */
+    public static List<Submission> getSubmissions(  User user,
+                                                    String subRedditName,
+                                                    int type )
+                                    throws IOException, ParseException {
+
+        return getSubmissions(  user, 
+                                subRedditName, 
+                                type, 
+                                DEFAULT_LIMIT,
+                                (String)null, 
+                                (String)null  );
+    }
+
+    /**
+     * This function returns a list containing the submissions on a given
+     * subreddit and page. 
+     * 
      * @param user              The user
+     * @param subRedditName     The subreddit's name
+     * @param type              HOT or NEW and some others to come
+     * @param before            fullname of a thing
+     * @param after             fillname of a thing
      *
      * @return The list containing submissions
      *
@@ -48,10 +90,12 @@ public class Submissions {
      * @throws ParseException   If JSON parsing fails
      */
     public static List<Submission> getSubmissions(
+                                            User user,
                                             String subRedditName,
                                             int type, 
-                                            int page, 
-                                            User user) 
+                                            int limit,
+                                            String before,
+                                            String after )
                                     throws IOException, ParseException {
 
         ArrayList<Submission> submissions = new ArrayList<Submission>();
@@ -66,28 +110,58 @@ public class Submissions {
             case NEW:
                 urlString += "/new";
                 break;
+            case HOT:
+                urlString += "/hot";
+                break;
+            case RISING:
+                urlString += "/rising";
+                break;
+            case CONTROVERSIAL:
+                urlString += "/controversial";
+                break;
+            case TOP:
+                urlString += "/top";
+                break;
         }
 
-        /**
-         * TODO Implement Pages
-         */
-
         urlString += ".json";
+        urlString += "?";
+
+        //
+        // Add additional parameters
+        // for pagination, limit, sort, etc.
+        //
+        urlString +=    "after=" + after + "&" +
+                        "limit=" + limit + "&";
+
         url = new URL(urlString);
 
-        JSONObject object = (JSONObject)Utils.get(url, user.getCookie());
+        JSONObject object = (JSONObject)Utils.get(  url, 
+                                                    user.getCookie());
+
         JSONObject data = (JSONObject)object.get("data");
-        
-        String before = (String)data.get("before");
-        String after = (String)data.get("after");
         JSONArray array = (JSONArray)data.get("children");
 
         //
-        // TODO a good way to do apging through the API...
-        // Might have to just expose this to the caller, ug. 
+        // TODO We could attempt to return these as part of pagination 
+        // navigation to the caller.
+        //
+        // Note as you become familiar with the API, I think 
+        // you realize this is not necessary to capture in its own 
+        // datastructure, as the caller can use the fullname of any
+        // object in a collection to get the next set (next page) of items 
+        //
+        // If that is the case, we can ignore this TODO and delete this stuff.
+        //
+        // String before = (String)data.get("before");
+        // String after = (String)data.get("after");
+
+        //
+        // Debug
         //
         // System.out.println("Before  " + before);
         // System.out.println("After   " + after);
+
 
         for (int i = 0; i < array.size(); i++) {
             JSONObject jsonData = (JSONObject)array.get(i);
@@ -103,7 +177,7 @@ public class Submissions {
      *
      */
     public static void submit(  User user,
-                                SubmissionType type,
+                                SubmissionType submissionType,
                                 String title, 
                                 String content,
                                 String subreddit ) 
@@ -114,14 +188,15 @@ public class Submissions {
         
         JSONObject ret = Utils.post(
                 "title=" + title + "&" + 
-                (type.equals(SubmissionType.TEXT) ? "text" : "url") + "=" + 
-                    content + "&" +
+                (submissionType.equals(SubmissionType.TEXT) ? 
+                    "text" : "url") + "=" + content + "&" +
                 "sr=" + subreddit + "&" +
-                "kind=" +
-                (type.equals(SubmissionType.TEXT) ? "self" : "link" ) + "&" +
+                "kind=" + (submissionType.equals(SubmissionType.TEXT) ? 
+                            "self" : "link" ) + "&" +
                 "uh=" + user.getModhash(),
             new URL("http://www.reddit.com/api/submit"), 
             user.getCookie());
+
 
         //
         // DEBUG print the response

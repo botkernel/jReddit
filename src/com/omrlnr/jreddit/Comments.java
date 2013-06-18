@@ -64,9 +64,13 @@ public class Comments {
      *
      * Submit a comment
      *
+     * @param user      A logged in user.
+     * @param fullname  The fullname of a thing we are replying to.
+     *                  E.g. a link submission, or a comment.
+     * @param text      The text of the reply.
      */
     public static void comment( User user,
-                                String thingId,
+                                String fullname,
                                 String text )
                                     throws IOException, ParseException {
 
@@ -74,7 +78,7 @@ public class Comments {
         
         JSONObject ret = Utils.post(
                 "api_type=json" + "&" +
-                "thing_id=" + thingId + "&" +
+                "thing_id=" + fullname + "&" +
                 "text=" + text + "&" +
                 "uh=" + user.getModhash(),
             new URL("http://www.reddit.com/api/comment"), 

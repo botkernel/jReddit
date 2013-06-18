@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.lang.Thread;
 
 import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -179,6 +180,7 @@ public class Utils {
      *
      * Handle any error response to a GET or POST request 
      *          for any error conditions returned.
+     *
      *  TODO need more thought on how to handle this stuff.
      *          Moving it here for now for a first pass refactor.
      * 
@@ -190,7 +192,47 @@ public class Utils {
      */
     public static void handleResponseErrors(JSONObject object) 
                                                     throws IOException {
+        
+        // System.out.println("handleResponseErrors()");
+        // System.out.println("object.toJSONString(): " + object.toJSONString());
 
+
+        //
+        // Attempt to handle errors by reading the json objects
+        //
+        JSONObject data = (JSONObject)object.get("json");
+        JSONArray array = (JSONArray)data.get("errors");
+
+
+        //
+        // Inspect each tuple in the array. It should indicate 
+        // an error condition.
+        //
+        for (int i = 0; i < array.size(); i++) {
+            JSONArray tuple = (JSONArray)array.get(i);
+            String error = (String)tuple.get(0);
+            String message = (String)tuple.get(1);
+
+
+            //
+            // TODO There is additional data here. Not sure how to
+            // interpret this just yet. 
+            //
+            // E.g. "ratelimit" which appears to map back to
+            //      "ratelimit:     134.33498" in the parent object.
+            //
+            String additionalData = (String)tuple.get(2);
+
+            //
+            // TODO Chain all errors?
+            //
+            throw new IOException(error + " " + message);
+        }
+
+
+        //
+        // Fall back to legacy error handling.
+        //
         if (object.toJSONString().contains(".error.USER_REQUIRED")) {
 
             throw new IOException(
@@ -204,7 +246,7 @@ public class Utils {
             throw new IOException("Quota filled. ");
 
         } else if (object.toJSONString().contains(
-                        ".error.RATELIMIT.field-ratelimit")) {
+                        ".error.RATELIMIT.field-ratelimit") ) {
 
             throw new IOException(
                     "Rate limit reached. " +

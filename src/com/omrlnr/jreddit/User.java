@@ -51,6 +51,7 @@ public class User {
 	 * @throws IOException      If connection fails
 	 * @throws ParseException   If JSON Parsing fails
 	 */
+     /*
 	public void submitLink(String title, String link, String subreddit)
 			throws IOException, ParseException {
 
@@ -77,6 +78,7 @@ public class User {
 							.get("jquery")).get(16)).get(3)).get(0));
 		}
 	}
+    */
 
 	/**
 	 * This function submits a self post to the specified subreddit.
@@ -88,6 +90,7 @@ public class User {
 	 * @throws IOException      If connection fails
 	 * @throws ParseException   If JSON Parsing fails
 	 */
+     /*
 	public void submitSelfPost(String title, String text, String subreddit)
 			throws IOException, ParseException {
 
@@ -113,6 +116,8 @@ public class User {
 							.get("jquery")).get(10)).get(3)).get(0));
 		}
 	}
+    */
+
 
 	/**
 	 * This functions returns true if this user has unread mail.
