@@ -43,7 +43,7 @@ public class TopThreadView {
                                                 user );
         if(comments.size() > 0) {
             Comment comment = comments.get(0);
-            System.out.println(comment.toString("        "));
+            System.out.println(comment.toString("       "));
             List<Comment> replies = comment.getReplies();
             for(Comment reply: replies) {
                 System.out.println(reply.toString("            "));

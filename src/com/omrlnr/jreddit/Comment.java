@@ -27,10 +27,15 @@ public class Comment extends Thing {
 
     public String toString(String indent) {
         String thing = super.toString(indent);
+        
+        if(getKind().equals(KIND_MORE)) {
+            return thing +
+                    indent + "    ...more...\n";
+        }
+
         return thing + 
             indent + "   Comment:    "   + getBody()     + "\n" +
             indent + "       author: "   + getAuthor()   + "\n" +
-            // indent + "       score: "    + getScore()    + "\n" +
             indent + "       up: "       + getUpVotes()  + "\n" +
             indent + "       down: "     + getDownVotes() + "\n";
             // indent + Utils.getJSONDebugString(_data, indent);
@@ -73,12 +78,7 @@ public class Comment extends Thing {
             JSONObject jsonData = (JSONObject)children.get(i);
             Comment comment = new Comment(jsonData);
 
-            //
-            // TODO handle this pagination somehow. ???
-            //
-            if(!comment.getKind().equals("more")) {
-                ret.add(new Comment(jsonData));
-            }
+            ret.add(new Comment(jsonData));
         }
 
         return ret;

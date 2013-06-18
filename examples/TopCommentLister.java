@@ -36,7 +36,7 @@ public class TopCommentLister {
                                                 submission.getId(),
                                                 user );
             if(comments.size() > 0) {
-                System.out.println("    **** " + comments.get(0));
+                System.out.println("   " + comments.get(0));
             } else {
                 System.out.println("    **** No comments");
             }

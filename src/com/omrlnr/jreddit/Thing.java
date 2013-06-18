@@ -16,6 +16,20 @@ import org.json.simple.JSONObject;
  */
 public abstract class Thing {
 
+    //
+    // Possible values for kind returned, by getKind()
+    //
+    public static final String KIND_LISTING     = "Listing";
+    public static final String KIND_MORE        = "more";
+    public static final String KIND_COMMENT     = "t1";
+    public static final String KIND_ACCOUNT     = "t2";
+    public static final String KIND_LINK        = "t3";
+    public static final String KIND_MESSAGE     = "t4";
+    public static final String KIND_SUBREDDIT   = "t5";
+    public static final String KIND_AWARD       = "t6";
+    public static final String KIND_PROMO       = "t8";
+
+
     /**
      * this item's identifier, e.g. "8xwlg"
      */
@@ -41,15 +55,6 @@ public abstract class Thing {
     public Thing(JSONObject data) {
         _data = data;
     }
-
-    /*
-    public Thing(String id, String name, String kind, Object data) {
-        this._id = id;
-        this._name = name;
-        this._kind = kind;
-        this._data = (JSONObject)data;
-    }
-    */
 
     public String getId() {
         return (String)((JSONObject)(_data.get("data"))).get("id");

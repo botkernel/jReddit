@@ -1,4 +1,4 @@
-# jReddit (forked from hormigas/jReddit)
+# jReddit (Original github repo: hormigas/jReddit)
 
 ## What is jReddit?
 
@@ -13,11 +13,8 @@
 ## What's next for jReddit?
 
     The original project (hormigas/jReddit) wants to implement every feature 
-    documented [here](http://www.reddit.com/dev/api).
+    documented http://www.reddit.com/dev/api
     
-    This fork is to improve on the original object model
-    and add functionality.
-
 ## Dependencies
 
 [JSON-simple](http://code.google.com/p/json-simple/)

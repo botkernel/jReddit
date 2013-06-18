@@ -2,6 +2,7 @@ package com.omrlnr.jreddit;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -56,6 +57,42 @@ public class Comments {
         }
 
         return comments;
+    }
+
+
+    /**
+     *
+     * Submit a comment
+     *
+     */
+    public static void comment( User user,
+                                String thingId,
+                                String text )
+                                    throws IOException, ParseException {
+
+        text = URLEncoder.encode(text, "UTF-8");
+        
+        JSONObject ret = Utils.post(
+                "api_type=json" + "&" +
+                "thing_id=" + thingId + "&" +
+                "text=" + text + "&" +
+                "uh=" + user.getModhash(),
+            new URL("http://www.reddit.com/api/comment"), 
+            user.getCookie());
+
+        //
+        // DEBUG print the response
+        //
+        // System.out.println("Comment posted.");
+        // System.out.println(Utils.getJSONDebugString(ret));
+
+
+        //
+        // Throw any exceptions if necessary.
+        //
+        Utils.handleResponseErrors(ret);
+
+
     }
 
 }

@@ -9,7 +9,7 @@ import java.util.*;
 
 /**
  *
- * A simple example that lists submissions in a subreddit
+ * A simple example that submits a submission/article to a subreddit
  * 
  */
 public class SubmissionTest {
