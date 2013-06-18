@@ -1,9 +1,4 @@
-import com.omrlnr.jreddit.Comment;
-import com.omrlnr.jreddit.Comments;
-import com.omrlnr.jreddit.Submission;
-import com.omrlnr.jreddit.Submissions;
-import com.omrlnr.jreddit.User;
-
+import com.omrlnr.jreddit.*;
 import com.omrlnr.jreddit.utils.Utils;
 
 import java.util.List;
@@ -26,9 +21,7 @@ public class TopThreadView {
         
         List<Submission> submissions = Submissions.getSubmissions(
                                                         user,
-                                                        subreddit,
-                                                        Submissions.HOT 
-                                                    );
+                                                        subreddit );
         if(submissions.size() == 0) {
             System.out.println("No submissions found.");
             return;

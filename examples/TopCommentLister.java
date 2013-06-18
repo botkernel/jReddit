@@ -1,9 +1,4 @@
-import com.omrlnr.jreddit.Comment;
-import com.omrlnr.jreddit.Comments;
-import com.omrlnr.jreddit.Submission;
-import com.omrlnr.jreddit.Submissions;
-import com.omrlnr.jreddit.User;
-
+import com.omrlnr.jreddit.*;
 import com.omrlnr.jreddit.utils.Utils;
 
 import java.util.List;
@@ -25,9 +20,8 @@ public class TopCommentLister {
         user.connect();
         
         List<Submission> submissions = Submissions.getSubmissions(
-                                                        user,
-                                                        subreddit,
-                                                        Submissions.HOT );
+                                                user,
+                                                subreddit );
 
         for(Submission submission: submissions) {
             System.out.println(submission);

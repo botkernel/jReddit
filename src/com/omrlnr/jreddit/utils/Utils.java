@@ -194,41 +194,41 @@ public class Utils {
                                                     throws IOException {
         
         // System.out.println("handleResponseErrors()");
-        // System.out.println("object.toJSONString(): " + object.toJSONString());
-
+        // System.out.println("object.toJSONString(): " + 
+        //                              object.toJSONString());
 
         //
         // Attempt to handle errors by reading the json objects
         //
         JSONObject data = (JSONObject)object.get("json");
-        JSONArray array = (JSONArray)data.get("errors");
-
-
-        //
-        // Inspect each tuple in the array. It should indicate 
-        // an error condition.
-        //
-        for (int i = 0; i < array.size(); i++) {
-            JSONArray tuple = (JSONArray)array.get(i);
-            String error = (String)tuple.get(0);
-            String message = (String)tuple.get(1);
-
+        if(data != null) {
+            JSONArray array = (JSONArray)data.get("errors");
 
             //
-            // TODO There is additional data here. Not sure how to
-            // interpret this just yet. 
+            // Inspect each tuple in the array. It should indicate 
+            // an error condition.
             //
-            // E.g. "ratelimit" which appears to map back to
-            //      "ratelimit:     134.33498" in the parent object.
-            //
-            String additionalData = (String)tuple.get(2);
+            for (int i = 0; i < array.size(); i++) {
+                JSONArray tuple = (JSONArray)array.get(i);
+                String error = (String)tuple.get(0);
+                String message = (String)tuple.get(1);
+    
+    
+                //
+                // TODO There is additional data here. Not sure how to
+                // interpret this just yet. 
+                //
+                // E.g. "ratelimit" which appears to map back to
+                //      "ratelimit:     134.33498" in the parent object.
+                //
+                String additionalData = (String)tuple.get(2);
 
-            //
-            // TODO Chain all errors?
-            //
-            throw new IOException(error + " " + message);
+                //
+                // TODO Chain all errors?
+                //
+                throw new IOException(error + " " + message);
+            }
         }
-
 
         //
         // Fall back to legacy error handling.

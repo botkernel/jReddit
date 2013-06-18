@@ -1,5 +1,6 @@
 import com.omrlnr.jreddit.Submission;
 import com.omrlnr.jreddit.Submissions;
+import com.omrlnr.jreddit.Submissions.ListingType;
 import com.omrlnr.jreddit.User;
 
 import com.omrlnr.jreddit.utils.Utils;
@@ -18,9 +19,8 @@ public final class GenerousBot {
 		user.connect();
 
 		for (int i = 0; i < subreddits.length; i++) {
-			for (Submission submission : Submissions.getSubmissions(user, 
-                                                        subreddits[i], 
-                                                        Submissions.NEW) ) {
+			for (Submission submission : Submissions.getSubmissions(
+                                                user, subreddits[i]) ) {
 
                 // 
                 // TODO fix this

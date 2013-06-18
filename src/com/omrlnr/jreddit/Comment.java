@@ -67,18 +67,33 @@ public class Comment extends Thing {
      */
     public List<Comment> getReplies() {
         List<Comment> ret = new ArrayList();
-       
         
         JSONObject data = (JSONObject)_data.get("data");
-        JSONObject replies = (JSONObject)data.get("replies");
-        JSONObject replyData = (JSONObject)replies.get("data");
-        JSONArray children = (JSONArray)replyData.get("children");
 
-        for (int i = 0; i < children.size(); i++) {
-            JSONObject jsonData = (JSONObject)children.get(i);
-            Comment comment = new Comment(jsonData);
+        //
+        // DEBUG
+        //
+        // System.out.println(Utils.getJSONDebugString(data));
 
-            ret.add(new Comment(jsonData));
+        //
+        // Need to check type of "replies" property.
+        // This is annoying. Rather than an empty object, if no replies
+        // are present the JSON tools treat this as a String. Therefore
+        // need to check instanceof on the "replies" property.
+        //
+        Object repliesObj = data.get("replies");
+        if(repliesObj instanceof JSONObject) {
+
+            JSONObject replies = (JSONObject)repliesObj;
+            JSONObject replyData = (JSONObject)replies.get("data");
+            JSONArray children = (JSONArray)replyData.get("children");
+    
+            for (int i = 0; i < children.size(); i++) {
+                JSONObject jsonData = (JSONObject)children.get(i);
+                Comment comment = new Comment(jsonData);
+    
+                ret.add(new Comment(jsonData));
+            }
         }
 
         return ret;

@@ -23,18 +23,32 @@ import com.omrlnr.jreddit.utils.Utils;
  */
 public class Submissions {
 
-    // 
-    // Types for retreiving subreddit content
-    //
-    public static final int HOT             = 0;
-    public static final int NEW             = 1;
-    public static final int RISING          = 2;
-    public static final int CONTROVERSIAL   = 3;
-    public static final int TOP             = 4;
+    /**
+     *
+     * Types for retreiving subreddit content
+     * sort criteria. (Though the API has a separate parameter for sort,
+     * that is not clear.)
+     *
+     */ 
+    public enum ListingType {
+        HOT,
+        NEW,
+        RISING,
+        CONTROVERSIAL,
+        TOP
+    }
 
     //
-    // Default limit (returned results per "page" for a list request.)
-    //
+    // deprecate / delete these
+    // public static final int HOT             = 0;
+    // public static final int NEW             = 1;
+    // public static final int RISING          = 2;
+    // public static final int CONTROVERSIAL   = 3;
+    // public static final int TOP             = 4;
+
+    /** 
+     *  Default limit (returned results per "page" for a list request.)
+     */ 
     public static final int DEFAULT_LIMIT   = 25;
 
     /**
@@ -62,13 +76,12 @@ public class Submissions {
      * @throws ParseException   If JSON parsing fails
      */
     public static List<Submission> getSubmissions(  User user,
-                                                    String subRedditName,
-                                                    int type )
+                                                    String subRedditName )
                                     throws IOException, ParseException {
 
         return getSubmissions(  user, 
                                 subRedditName, 
-                                type, 
+                                ListingType.HOT, 
                                 DEFAULT_LIMIT,
                                 (String)null, 
                                 (String)null  );
@@ -92,7 +105,7 @@ public class Submissions {
     public static List<Submission> getSubmissions(
                                             User user,
                                             String subRedditName,
-                                            int type, 
+                                            ListingType type, 
                                             int limit,
                                             String before,
                                             String after )
