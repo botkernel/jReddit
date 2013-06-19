@@ -84,9 +84,9 @@ public abstract class Thing {
 
     public String toString(String indent) {
         return  indent + "Thing: \n" +
-                indent + "   id: "   + getId()   + "\n" +
                 indent + "   name: " + getName() + "\n" +
-                indent + "   kind: " + getKind() + "\n";
+                indent + "   id:   " + getId()   + "\n" +
+                indent + "   kind: " + getKind() + "\n"; 
     }
 
 }

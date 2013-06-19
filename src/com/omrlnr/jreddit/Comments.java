@@ -22,6 +22,30 @@ import com.omrlnr.jreddit.utils.Utils;
 public class Comments {
 
     /**
+     * This function returns a single comment, given a fullname
+     *
+     * @param user              The user
+     * @param fullname          The fullname of the comment.
+     *
+     * @return The comment with the specified fullname
+     *
+     */
+    public static Comment getComment(User user, String fullname)
+                                    throws IOException, ParseException {
+
+        String urlString = "http://www.reddit.com/api/info.json?id=" + fullname;
+        URL url = new URL(urlString);
+
+        JSONObject obj = (JSONObject)Utils.get(url, user.getCookie());
+        JSONObject data = (JSONObject)obj.get("data");
+        JSONArray children = (JSONArray)data.get("children");
+
+        JSONObject jsonData = (JSONObject)children.get(0);
+        return new Comment(jsonData);
+ 
+    }
+
+    /**
      * This function returns a list of comments
      * 
      * @param articleId         The id of the link/article/submission
@@ -35,6 +59,18 @@ public class Comments {
     public static List<Comment> getComments(    String articleId, 
                                                 User user ) 
                                     throws IOException, ParseException {
+
+        if(articleId.startsWith(Thing.KIND_LINK+"_")) {
+            //
+            // Fix this for them. The caller should be able to pass in
+            // a fullname here.
+            //
+            articleId = articleId.substring( (Thing.KIND_LINK+"_").length() );
+
+            // DEBUG
+            // System.out.println(
+            // "Article ID changed fullname to " + articleId);
+        }
 
         ArrayList<Comment> comments = new ArrayList<Comment>();
 

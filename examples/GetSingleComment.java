@@ -10,35 +10,41 @@ import java.util.List;
 
 /**
  *
- * A simple example that lists comments replying to a submission
+ * An example to retrieve a single comment given its fullname
  * 
  */
-public class CommentLister {
+public class GetSingleComment {
 
     /**
      *
      * Usage:
-     * ./runExample.sh CommentLister <user> <pass> <articleid>
+     * ./runExample.sh CommentLister <user> <pass> <fullename>
      *
      * e.g.
-     * ./runExample.sh CommentLister joesmith secret123 1xlgde
-     * ./runExample.sh CommentLister joesmith secret123 t3_1llgde
+     * ./runExample.sh CommentLister joesmith secret123 t1_1glgde
+     *
      *
      */
     public static void main(String[] args) throws Exception {
 
         String username     = args[0];
         String password     = args[1];
-        String article      = args[2];
+        String fullname     = args[2];
 
         User user = new User(username, password);
         user.connect();
         
-        List<Comment> comments = Comments.getComments(
-                                                article,
-                                                user );
+        Comment comment = Comments.getComment( user, fullname );
 
-        printAllComments(comments, "");
+        System.out.println(comment);
+
+        //
+        // Not sure if the API will actually return child comments for this.
+        //
+        List<Comment> replies = comment.getReplies();
+        if(replies.size() > 0) {
+            printAllComments(replies, "    ");
+        }
     }
 
     /** 

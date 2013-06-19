@@ -30,6 +30,7 @@ public class Message extends Thing {
         return thing + 
             indent + "   Comment:       "   + getBody()     + "\n" +
             indent + "       author:    "   + getAuthor()   + "\n" +
+            indent + "       context:   "   + getContext()   + "\n" +
             indent + "       parent_id: "   + getParentId()   + "\n";
             // indent + Utils.getJSONDebugString(_data, indent);
 
@@ -39,12 +40,44 @@ public class Message extends Thing {
         return (String)((JSONObject)_data.get("data")).get("body");
     }
 
+    public String getContext() { 
+        return (String)((JSONObject)_data.get("data")).get("context");
+    }
+
     public String getParentId() { 
         return (String)((JSONObject)_data.get("data")).get("parent_id");
     }
 
     public String getAuthor() { 
         return (String)((JSONObject)_data.get("data")).get("author");
+    }
+
+    /**
+     * Return true if this is a reply to a comment.
+     */
+    public boolean isCommentReply() {
+        String parentId = getParentId();
+        if(parentId == null) {
+            return false;
+        }
+        //
+        // parent id starts with t1
+        //
+        return parentId.startsWith(KIND_COMMENT+"_");
+    }
+
+    /**
+     * Return true if this is a reply to a post.
+     */
+    public boolean isPostReply() {
+        String parentId = getParentId();
+        if(parentId == null) {
+            return false;
+        }
+        //
+        // parent id starts with t3
+        //
+        return parentId.startsWith(KIND_LINK+"_");
     }
 
     /**

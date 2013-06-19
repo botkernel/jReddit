@@ -34,10 +34,11 @@ public class Comment extends Thing {
         }
 
         return thing + 
-            indent + "   Comment:    "   + getBody()     + "\n" +
-            indent + "       author: "   + getAuthor()   + "\n" +
-            indent + "       up: "       + getUpVotes()  + "\n" +
-            indent + "       down: "     + getDownVotes() + "\n";
+            indent + "   Comment:    " + getBody()        + "\n" +
+            indent + "       author: " + getAuthor()      + "\n" +
+            indent + "       up:     " + getUpVotes()     + "\n" +
+            indent + "       down:   " + getDownVotes()   + "\n" +
+            indent + "       parent: " + getParentId()    + "\n";
             // indent + Utils.getJSONDebugString(_data, indent);
 
     }
@@ -60,6 +61,10 @@ public class Comment extends Thing {
 
     public String getAuthor() { 
         return (String)((JSONObject)_data.get("data")).get("author");
+    }
+
+    public String getParentId() { 
+        return (String)((JSONObject)_data.get("data")).get("parent_id");
     }
 
     /**
