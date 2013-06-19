@@ -31,7 +31,8 @@ public class Message extends Thing {
             indent + "   Comment:       "   + getBody()     + "\n" +
             indent + "       author:    "   + getAuthor()   + "\n" +
             indent + "       context:   "   + getContext()   + "\n" +
-            indent + "       parent_id: "   + getParentId()   + "\n";
+            indent + "       parent_id: "   + getParentId()   + "\n" + 
+            indent + "       new:       "   + isNew()   + "\n";
             // indent + Utils.getJSONDebugString(_data, indent);
 
     }
@@ -50,6 +51,10 @@ public class Message extends Thing {
 
     public String getAuthor() { 
         return (String)((JSONObject)_data.get("data")).get("author");
+    }
+
+    public boolean isNew() { 
+        return (Boolean)((JSONObject)_data.get("data")).get("new");
     }
 
     /**

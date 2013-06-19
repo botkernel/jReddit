@@ -21,6 +21,17 @@ import com.omrlnr.jreddit.utils.Utils;
  */
 public class Messages {
 
+    public enum MessageType {
+        INBOX,
+        UNREAD,
+        SENT
+    }
+
+    public static List<Message> getMessages( User user ) 
+                                    throws IOException, ParseException {
+
+        return getMessages( user, MessageType.INBOX );
+    }
 
     /**
      * This function returns a list of messages
@@ -32,12 +43,27 @@ public class Messages {
      * @throws IOException      If connection fails
      * @throws ParseException   If JSON parsing fails
      */
-    public static List<Message> getMessages( User user ) 
+    public static List<Message> getMessages(    User user,
+                                                MessageType messageType) 
                                     throws IOException, ParseException {
 
         ArrayList<Message> messages = new ArrayList<Message>();
 
-        String urlString = "http://www.reddit.com/message/inbox.json";
+        String urlString = "http://www.reddit.com/message/";
+
+        switch(messageType) {
+            case UNREAD:
+                urlString += "unread";
+                break;
+            case INBOX:
+                urlString += "inbox";
+                break;
+            case SENT:
+                urlString += "sent";
+                break;
+        }
+        
+        urlString += ".json";
 
         URL url = new URL(urlString);
 
@@ -58,6 +84,46 @@ public class Messages {
 
         return messages;
     }
+
+    /**
+     * 
+     * Mark a message as read.
+     *
+     */
+    public static void markAsRead(  User user, 
+                                    Message message ) 
+                                throws IOException, ParseException {
+        markAsRead(user, message.getName());
+    }
+
+    /**
+     *
+     * Mark a message as read.
+     *
+     */
+    public static void markAsRead(  User user,
+                                    String fullname ) 
+                                throws IOException, ParseException {
+
+        String urlString = "http://www.reddit.com/api/read_message/";
+
+        // urlString += ".json";
+
+        URL url = new URL(urlString);
+
+        JSONObject jsonObject = (JSONObject)Utils.post(
+                                    "id=" + fullname + "&" +
+                                    "uh=" + user.getModhash(),
+                                    url, 
+                                    user.getCookie());
+
+        //
+        // DEBUG
+        //
+        // System.out.println(Utils.getJSONDebugString(jsonObject));
+
+    }
+
 
 }
 
