@@ -20,18 +20,24 @@ public class Submission extends Thing {
     public String toString() {
         String thing = super.toString();
         return thing +
-                "   Submission: "   + getTitle()        + "\n" +
-                "       author: "   + getAuthor()       + "\n" +
-                "       url:    "   + getUrl()          + "\n" +
-                "       score:  "   + getScore()        + "\n" +
-                "       up:     "   + getUpVotes()      + "\n" +
-                "       down:   "   + getDownVotes()    + "\n";
+                "   Submission:   "   + getTitle()        + "\n" +
+                "       author:   "   + getAuthor()       + "\n" +
+                "       url:      "   + getUrl()          + "\n" +
+                "       score:    "   + getScore() + 
+                                        " (" 
+                                            + getUpVotes() + "/" 
+                                            + getDownVotes() + ")" + "\n" + 
+                "       comments: " + getNumComments()      + "\n";
                 // Utils.getJSONDebugString(_data);
 
     }
 
     public String getUrl() { 
         return (String)((JSONObject)_data.get("data")).get("url");
+    }
+
+    public long getNumComments() { 
+        return (Long)((JSONObject)_data.get("data")).get("num_comments");
     }
 
     public long getUpVotes() { 

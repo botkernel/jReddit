@@ -20,7 +20,11 @@ import org.json.simple.parser.ParseException;
 
 
 /**
+ *
  * This class contains (or will contain) various utilities for jReddit.
+ *
+ * @author <a href="http://www.omrlnr.com">Omer Elnour</a>
+ * @author <a hred="https://github.com/jasonsimpson">Jason Simpson</a>
  * 
  */
 public class Utils {
@@ -30,6 +34,30 @@ public class Utils {
     private static final String USER_AGENT = 
                                     "jReddit Java API user agent v0.02";
 
+    private static String userAgent = USER_AGENT;
+
+
+    /**
+     *
+     * Set the user agent.
+     *
+     * Would be nice if this wasn't static.
+     * This means all API calls from this JVM instance will use the same
+     * agent string.
+     *
+     */
+    public static void setUserAgent(String agentString) {
+        userAgent = agentString;
+    }
+
+    /**
+     * Get the user agent.
+     *
+     * @return The user agent string.
+     *
+     */
+    public static String getUserAgent() { return userAgent; }
+
     /**
      * 
      * This function submits a POST request and returns a JSON object response
@@ -38,7 +66,7 @@ public class Utils {
     public static JSONObject post(  String apiParams, 
                                     URL url, 
                                     String cookie )
-                                        throws IOException, ParseException {
+                                        throws IOException {
 
         //
         // Adhere to API rules....
@@ -60,18 +88,27 @@ public class Utils {
         connection.setRequestProperty("Content-Length",
                 String.valueOf(apiParams.length()));
         connection.setRequestProperty("cookie", "reddit_session=" + cookie);
-        connection.setRequestProperty("User-Agent", USER_AGENT);
+        connection.setRequestProperty("User-Agent", getUserAgent() );
         DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
         wr.writeBytes(apiParams);
         wr.flush();
         wr.close();
 
-        JSONParser parser = new JSONParser();
-        Object object = parser.parse(new BufferedReader(new InputStreamReader(
-                connection.getInputStream())).readLine());
-        JSONObject jsonObject = (JSONObject) object;
+        try {
 
-        return jsonObject;
+            JSONParser parser = new JSONParser();
+            Object object = 
+                parser.parse(new BufferedReader(new InputStreamReader(
+                    connection.getInputStream())).readLine());
+            JSONObject jsonObject = (JSONObject) object;
+            return jsonObject;
+
+        } catch(ParseException pe) {
+            //
+            // pe.printStackTrace();
+
+            throw new IOException("Error parsing POST response.", pe);
+        }
     }
 
     /**
@@ -79,7 +116,7 @@ public class Utils {
      */
     public static Object get(   URL url, 
                                 String cookie)
-                                        throws IOException, ParseException {
+                                        throws IOException {
         return get("", url, cookie);
     }
 
@@ -89,7 +126,7 @@ public class Utils {
     public static Object get(   String apiParams, 
                                 URL url, 
                                 String cookie)
-                                    throws IOException, ParseException {
+                                    throws IOException {
 
         //
         // Adhere to API rules....
@@ -108,16 +145,26 @@ public class Utils {
         connection.setUseCaches(false);
         connection.setRequestMethod("GET");
         connection.setRequestProperty("cookie", "reddit_session=" + cookie);
-        connection.setRequestProperty("User-Agent", USER_AGENT);
+        connection.setRequestProperty("User-Agent", getUserAgent() );
 
-        JSONParser parser = new JSONParser();
-        Object object = parser.parse(new BufferedReader(new InputStreamReader(
-                connection.getInputStream())).readLine());
+        try {
+            JSONParser parser = new JSONParser();
+            Object object = 
+                parser.parse(new BufferedReader(new InputStreamReader(
+                    connection.getInputStream())).readLine());
 
-        // JSONObject jsonObject = (JSONObject) object;
-        // return jsonObject;
+            // JSONObject jsonObject = (JSONObject) object;
+            // return jsonObject;
 
-        return object;
+            return object;
+
+        } catch(ParseException pe) {
+            //
+            // pe.printStackTrace();
+
+            throw new IOException("Error parsing GET response.", pe);
+        }
+
     }
 
     /**

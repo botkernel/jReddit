@@ -18,10 +18,10 @@ public class GetSingleComment {
     /**
      *
      * Usage:
-     * ./runExample.sh CommentLister <user> <pass> <fullename>
+     * ./runExample.sh GetSingleComment <user> <pass> <fullename>
      *
      * e.g.
-     * ./runExample.sh CommentLister joesmith secret123 t1_1glgde
+     * ./runExample.sh GetSingleComment joesmith secret123 t1_1glgde
      *
      *
      */

@@ -26,8 +26,8 @@ public class TopCommentLister {
         for(Submission submission: submissions) {
             System.out.println(submission);
             List<Comment> comments = Comments.getComments(
-                                                submission.getId(),
-                                                user );
+                                                user, 
+                                                submission.getId());
             if(comments.size() > 0) {
                 System.out.println("   " + comments.get(0));
             } else {

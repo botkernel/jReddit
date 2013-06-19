@@ -35,7 +35,7 @@ public class User {
 	 * 
 	 * @throws Exception    If connection fails.
 	 */
-	public void connect() throws Exception {
+	public void connect() throws IOException {
 		ArrayList<String> hashCookiePair = hashCookiePair(username, password);
 		this.modhash = hashCookiePair.get(0);
 		this.cookie = hashCookiePair.get(1);
@@ -204,7 +204,7 @@ public class User {
 	 *             If parsing JSON fails
 	 */
 	private ArrayList<String> hashCookiePair(String username, String password)
-			throws IOException, ParseException {
+			                                    throws IOException {
 		ArrayList<String> values = new ArrayList<String>();
 		JSONObject jsonObject = Utils.post("api_type=json&user=" + username
 				+ "&passwd=" + password, new URL(

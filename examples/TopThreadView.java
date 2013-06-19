@@ -32,8 +32,8 @@ public class TopThreadView {
         System.out.println(submission);
 
         List<Comment> comments = Comments.getComments(
-                                                submission.getId(),
-                                                user );
+                                                user,
+                                                submission.getId());
         if(comments.size() > 0) {
             Comment comment = comments.get(0);
             System.out.println(comment.toString("       "));

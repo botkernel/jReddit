@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @author <a href="https://github.com/jasonsimpson">Jason Simpson</a>
  * 
  */
-public class Comment extends Thing {
+public class Comment extends Thing implements Votable {
 
     public Comment(JSONObject jsonObj) {
         super(jsonObj);
@@ -38,6 +38,7 @@ public class Comment extends Thing {
             indent + "       author: " + getAuthor()      + "\n" +
             indent + "       up:     " + getUpVotes()     + "\n" +
             indent + "       down:   " + getDownVotes()   + "\n" +
+            indent + "       likes:  " + getLikes()       + "\n" +
             indent + "       parent: " + getParentId()    + "\n";
             // indent + Utils.getJSONDebugString(_data, indent);
 
@@ -47,6 +48,21 @@ public class Comment extends Thing {
         return (String)((JSONObject)_data.get("data")).get("body");
     }
 
+    public String getAuthor() { 
+        return (String)((JSONObject)_data.get("data")).get("author");
+    }
+
+    public String getParentId() { 
+        return (String)((JSONObject)_data.get("data")).get("parent_id");
+    }
+
+
+    //
+    // Methods for implementing Votable.
+    // See
+    // https://github.com/reddit/reddit/wiki/JSON#votable-implementation
+    //
+
     public long getUpVotes() { 
         return (Long)((JSONObject)_data.get("data")).get("ups");
     }
@@ -55,17 +71,15 @@ public class Comment extends Thing {
         return (Long)((JSONObject)_data.get("data")).get("downs");
     }
 
-    public long getScore() { 
-        return (Long)((JSONObject)_data.get("data")).get("score");
+    public Boolean getLikes() { 
+        return (Boolean)((JSONObject)_data.get("data")).get("likes");
+
+        // Boolean b = (Boolean)((JSONObject)_data.get("data")).get("likes");
+        // if(b == null) {
+        //    return false;
+        // }
     }
 
-    public String getAuthor() { 
-        return (String)((JSONObject)_data.get("data")).get("author");
-    }
-
-    public String getParentId() { 
-        return (String)((JSONObject)_data.get("data")).get("parent_id");
-    }
 
     /**
      * Get the replies to this comment.

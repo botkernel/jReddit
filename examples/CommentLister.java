@@ -35,8 +35,10 @@ public class CommentLister {
         user.connect();
         
         List<Comment> comments = Comments.getComments(
-                                                article,
-                                                user );
+                                                user, 
+                                                article);
+
+        System.out.println("Found comments: " + comments.size());
 
         printAllComments(comments, "");
     }

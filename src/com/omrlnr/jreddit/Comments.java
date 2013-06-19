@@ -46,19 +46,34 @@ public class Comments {
     }
 
     /**
-     * This function returns a list of comments
+     * This function returns a list of comments given a Submission
      * 
-     * @param articleId         The id of the link/article/submission
      * @param user              The user
+     * @param submission        A submission
      *
      * @return A list containing Comments
      *
      * @throws IOException      If connection fails
-     * @throws ParseException   If JSON parsing fails
+     */ 
+    public static List<Comment> getComments(    User user,
+                                                Submission submission )
+                                            throws IOException {
+        return getComments( user, submission.getId() );
+    }
+
+    /**
+     * This function returns a list of comments
+     * 
+     * @param user              The user
+     * @param articleId         The id of the link/article/submission
+     *
+     * @return A list containing Comments
+     *
+     * @throws IOException      If connection fails
      */
-    public static List<Comment> getComments(    String articleId, 
-                                                User user ) 
-                                    throws IOException, ParseException {
+    public static List<Comment> getComments(    User user,
+                                                String articleId )
+                                            throws IOException {
 
         if(articleId.startsWith(Thing.KIND_LINK+"_")) {
             //
@@ -143,5 +158,7 @@ public class Comments {
 
 
     }
+
+
 
 }
