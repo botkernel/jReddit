@@ -9,7 +9,6 @@ import java.net.URLEncoder;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 
 import com.omrlnr.jreddit.User;
 import com.omrlnr.jreddit.utils.Utils;
@@ -73,11 +72,10 @@ public class Submissions {
      * @return The list containing submissions
      *
      * @throws IOException      If connection fails
-     * @throws ParseException   If JSON parsing fails
      */
     public static List<Submission> getSubmissions(  User user,
                                                     String subRedditName )
-                                    throws IOException, ParseException {
+                                                throws IOException {
 
         return getSubmissions(  user, 
                                 subRedditName, 
@@ -100,7 +98,6 @@ public class Submissions {
      * @return The list containing submissions
      *
      * @throws IOException      If connection fails
-     * @throws ParseException   If JSON parsing fails
      */
     public static List<Submission> getSubmissions(
                                             User user,
@@ -109,7 +106,7 @@ public class Submissions {
                                             int limit,
                                             String before,
                                             String after )
-                                    throws IOException, ParseException {
+                                        throws IOException {
 
         ArrayList<Submission> submissions = new ArrayList<Submission>();
         URL url;
@@ -194,7 +191,7 @@ public class Submissions {
                                 String title, 
                                 String content,
                                 String subreddit ) 
-                                    throws IOException, ParseException {
+                                    throws IOException {
 
         title   = URLEncoder.encode(title, "UTF-8");
         content = URLEncoder.encode(content, "UTF-8");

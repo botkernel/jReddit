@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 
 import com.omrlnr.jreddit.User;
 import com.omrlnr.jreddit.utils.Utils;
@@ -31,7 +30,7 @@ public class Comments {
      *
      */
     public static Comment getComment(User user, String fullname)
-                                    throws IOException, ParseException {
+                                    throws IOException {
 
         String urlString = "http://www.reddit.com/api/info.json?id=" + fullname;
         URL url = new URL(urlString);
@@ -119,6 +118,22 @@ public class Comments {
         return comments;
     }
 
+    /**
+     * Submit a comment
+     *
+     * @param user      A logged in user.
+     * @param thing     The thing we are replying to.
+     *                      Should probably be a Comment or a Submission
+     *                      Should maybe add an interface called Repliable
+     * @param text      The text of the reply.
+     *
+     */
+    public static void comment( User user,
+                                Thing thing,
+                                String text )
+                                    throws IOException {
+        comment(user, thing.getName(), text);
+    }
 
     /**
      *
@@ -132,7 +147,7 @@ public class Comments {
     public static void comment( User user,
                                 String fullname,
                                 String text )
-                                    throws IOException, ParseException {
+                                    throws IOException {
 
         text = URLEncoder.encode(text, "UTF-8");
         

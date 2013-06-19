@@ -11,7 +11,7 @@ import com.omrlnr.jreddit.utils.Utils;
  * @author <a href="https://github.com/jasonsimpson">Jason Simpson</a>
  * 
  */
-public class Submission extends Thing {
+public class Submission extends Thing implements Votable {
 
     public Submission(JSONObject data) {
         super(data);
@@ -27,7 +27,8 @@ public class Submission extends Thing {
                                         " (" 
                                             + getUpVotes() + "/" 
                                             + getDownVotes() + ")" + "\n" + 
-                "       comments: " + getNumComments()      + "\n";
+                "       comments: " + getNumComments() + 
+                " selfpost: " + isSelfPost() + "\n";
                 // Utils.getJSONDebugString(_data);
 
     }
@@ -44,6 +45,33 @@ public class Submission extends Thing {
         return (Long)((JSONObject)_data.get("data")).get("ups");
     }
 
+    public String getAuthor() { 
+        return (String)((JSONObject)_data.get("data")).get("author");
+    }
+
+    public String getTitle() { 
+        return (String)((JSONObject)_data.get("data")).get("title");
+    }
+
+    public String getSelftext() { 
+        return (String)((JSONObject)_data.get("data")).get("selftext");
+    }
+    
+    public boolean isSelfPost() {
+        // return (Boolean)((JSONObject)_data.get("data")).get("is_self");
+
+        Boolean b = (Boolean)((JSONObject)_data.get("data")).get("is_self");
+        if(b == null) {
+            return false;
+        }
+
+        return b.booleanValue();
+    }
+
+    //
+    // Methods to implement Votable
+    //
+
     public long getDownVotes() { 
         return (Long)((JSONObject)_data.get("data")).get("downs");
     }
@@ -52,13 +80,10 @@ public class Submission extends Thing {
         return (Long)((JSONObject)_data.get("data")).get("score");
     }
 
-    public String getAuthor() { 
-        return (String)((JSONObject)_data.get("data")).get("author");
+    public Boolean getLikes() {
+        return (Boolean)((JSONObject)_data.get("data")).get("likes");
     }
 
-    public String getTitle() { 
-        return (String)((JSONObject)_data.get("data")).get("title");
-    }
 
 
 }
