@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 
 import com.omrlnr.jreddit.User;
 import com.omrlnr.jreddit.utils.Utils;
@@ -28,7 +27,7 @@ public class Messages {
     }
 
     public static List<Message> getMessages( User user ) 
-                                    throws IOException, ParseException {
+                                                throws IOException {
 
         return getMessages( user, MessageType.INBOX );
     }
@@ -41,11 +40,10 @@ public class Messages {
      * @return A list containing messages
      *
      * @throws IOException      If connection fails
-     * @throws ParseException   If JSON parsing fails
      */
     public static List<Message> getMessages(    User user,
                                                 MessageType messageType) 
-                                    throws IOException, ParseException {
+                                            throws IOException {
 
         ArrayList<Message> messages = new ArrayList<Message>();
 
@@ -92,7 +90,7 @@ public class Messages {
      */
     public static void markAsRead(  User user, 
                                     Message message ) 
-                                throws IOException, ParseException {
+                                throws IOException {
         markAsRead(user, message.getName());
     }
 
@@ -103,7 +101,7 @@ public class Messages {
      */
     public static void markAsRead(  User user,
                                     String fullname ) 
-                                throws IOException, ParseException {
+                                throws IOException {
 
         String urlString = "http://www.reddit.com/api/read_message/";
 
