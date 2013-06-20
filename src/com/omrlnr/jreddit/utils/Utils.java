@@ -18,6 +18,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.omrlnr.jreddit.*;
+
 
 /**
  *
@@ -259,7 +261,11 @@ public class Utils {
                 JSONArray tuple = (JSONArray)array.get(i);
                 String error = (String)tuple.get(0);
                 String message = (String)tuple.get(1);
-    
+   
+                if(error.equals("RATELIMIT")) {
+                    throw new RateLimitException(error + " " + message);
+                }
+
     
                 //
                 // TODO There is additional data here. Not sure how to
