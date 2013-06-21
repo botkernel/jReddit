@@ -44,7 +44,7 @@ public class RateLimitException extends IOException {
 
         try {
             ret = Integer.parseInt(time);
-            if(message.indexOf("minutes") != -1) {
+            if(message.indexOf("minute") != -1) {
                 // We need to wait minutes before retrying.
                 ret = ret * 60;
             }
