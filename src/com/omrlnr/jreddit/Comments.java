@@ -38,10 +38,16 @@ public class Comments {
         JSONObject obj = (JSONObject)Utils.get(url, user.getCookie());
         JSONObject data = (JSONObject)obj.get("data");
         JSONArray children = (JSONArray)data.get("children");
+       
+        //
+        // Not sure why this can be empty sometimes...
+        //
+        if(children.size() > 0) {
+            JSONObject jsonData = (JSONObject)children.get(0);
+            return new Comment(jsonData);
+        }
 
-        JSONObject jsonData = (JSONObject)children.get(0);
-        return new Comment(jsonData);
- 
+        return null;
     }
 
     /**
