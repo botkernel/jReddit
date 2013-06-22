@@ -35,7 +35,9 @@ public class Utils {
     // TODO make this configurable. 
     // (In order to accommodate multiple threads.)
     //
-    private static int SLEEP_TIME = 10000;
+    private static int SLEEP_TIME = 3000;
+
+    private static Object lock = new Object();
 
     private static final String USER_AGENT = 
                                     "jReddit Java API user agent v0.02";
@@ -73,6 +75,7 @@ public class Utils {
                                     URL url, 
                                     String cookie )
                                         throws IOException {
+      synchronized(lock) {
 
         //
         // Adhere to API rules....
@@ -115,6 +118,7 @@ public class Utils {
 
             throw new IOException("Error parsing POST response.", pe);
         }
+      }
     }
 
     /**
@@ -133,7 +137,7 @@ public class Utils {
                                 URL url, 
                                 String cookie)
                                     throws IOException {
-
+      synchronized(lock) {
         //
         // Adhere to API rules....
         // (Make this configurable)
@@ -170,7 +174,7 @@ public class Utils {
 
             throw new IOException("Error parsing GET response.", pe);
         }
-
+      }
     }
 
     /**
