@@ -28,11 +28,18 @@ public class Messages {
         SENT
     }
 
-    public static List<Message> getMessages( User user ) 
-                                                throws IOException {
+    public static List<Message> getMessages(    User user ) 
+                                                        throws IOException {
 
         return getMessages( user, MessageType.INBOX, LIMIT );
     }
+
+    public static List<Message> getMessages(    User user,
+                                                MessageType messageType ) 
+                                                        throws IOException {
+        return getMessages( user, messageType, LIMIT );
+    }
+
 
     /**
      * This function returns a list of messages
