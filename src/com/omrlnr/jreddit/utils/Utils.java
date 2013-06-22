@@ -31,7 +31,11 @@ import com.omrlnr.jreddit.*;
  */
 public class Utils {
 
-    private static int SLEEP_TIME = 2000;
+    //
+    // TODO make this configurable. 
+    // (In order to accommodate multiple threads.)
+    //
+    private static int SLEEP_TIME = 10000;
 
     private static final String USER_AGENT = 
                                     "jReddit Java API user agent v0.02";
