@@ -75,50 +75,69 @@ public class Utils {
                                     URL url, 
                                     String cookie )
                                         throws IOException {
-      synchronized(lock) {
+        synchronized(lock) {
 
-        //
-        // Adhere to API rules....
-        // (Make this configurable)
-        //        
-        try {
-            Thread.sleep(SLEEP_TIME);
-        } catch(InterruptedException ie) {
-            ie.printStackTrace();
-            return null;
-        }
-
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setDoOutput(true);
-        connection.setUseCaches(false);
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type",
-                "application/x-www-form-urlencoded; charset=UTF-8");
-        connection.setRequestProperty("Content-Length",
-                String.valueOf(apiParams.length()));
-        connection.setRequestProperty("cookie", "reddit_session=" + cookie);
-        connection.setRequestProperty("User-Agent", getUserAgent() );
-        DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-        wr.writeBytes(apiParams);
-        wr.flush();
-        wr.close();
-
-        try {
-
-            JSONParser parser = new JSONParser();
-            Object object = 
-                parser.parse(new BufferedReader(new InputStreamReader(
-                    connection.getInputStream())).readLine());
-            JSONObject jsonObject = (JSONObject) object;
-            return jsonObject;
-
-        } catch(ParseException pe) {
             //
-            // pe.printStackTrace();
+            // Adhere to API rules....
+            // (Make this configurable)
+            //        
+            try {
+                Thread.sleep(SLEEP_TIME);
+            } catch(InterruptedException ie) {
+                ie.printStackTrace();
+                return null;
+            }
 
-            throw new IOException("Error parsing POST response.", pe);
+            HttpURLConnection connection = 
+                                (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true);
+            connection.setUseCaches(false);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type",
+                "application/x-www-form-urlencoded; charset=UTF-8");
+            connection.setRequestProperty("Content-Length",
+                String.valueOf(apiParams.length()));
+            connection.setRequestProperty("cookie", "reddit_session=" + cookie);
+            connection.setRequestProperty("User-Agent", getUserAgent() );
+            DataOutputStream wr = 
+                        new DataOutputStream(connection.getOutputStream());
+
+            wr.writeBytes(apiParams);
+            wr.flush();
+            wr.close();
+
+            try {
+
+                JSONParser parser = new JSONParser();
+                Object object = 
+                    parser.parse(new BufferedReader(new InputStreamReader(
+                        connection.getInputStream())).readLine());
+                JSONObject jsonObject = (JSONObject) object;
+                return jsonObject;
+
+            } catch(IOException ioe) {
+
+                // Handle 403 ... 
+                //      IOException can be thrown from 
+                //      HttpURLConnection.getInputStream(). 
+                //      This seems to indicate a ban.
+                //
+                
+                String msg = ioe.getMessage();
+                if(msg.indexOf(
+                    "Server returned HTTP response code: 403") != -1) {
+                    throw new BannedUserException(msg);
+                }
+                throw ioe;
+
+
+            } catch(ParseException pe) {
+                //
+                // pe.printStackTrace();
+
+                throw new IOException("Error parsing POST response.", pe);
+            }
         }
-      }
     }
 
     /**
@@ -137,44 +156,61 @@ public class Utils {
                                 URL url, 
                                 String cookie)
                                     throws IOException {
-      synchronized(lock) {
-        //
-        // Adhere to API rules....
-        // (Make this configurable)
-        //        
-        try {
-            Thread.sleep(SLEEP_TIME);
-        } catch(InterruptedException ie) {
-            ie.printStackTrace();
-            return null;
-        }
+        synchronized(lock) {
 
-
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setDoOutput(true);
-        connection.setUseCaches(false);
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("cookie", "reddit_session=" + cookie);
-        connection.setRequestProperty("User-Agent", getUserAgent() );
-
-        try {
-            JSONParser parser = new JSONParser();
-            Object object = 
-                parser.parse(new BufferedReader(new InputStreamReader(
-                    connection.getInputStream())).readLine());
-
-            // JSONObject jsonObject = (JSONObject) object;
-            // return jsonObject;
-
-            return object;
-
-        } catch(ParseException pe) {
             //
-            // pe.printStackTrace();
+            // Adhere to API rules....
+            // (Make this configurable)
+            //        
+            try {
+                Thread.sleep(SLEEP_TIME);
+            } catch(InterruptedException ie) {
+                ie.printStackTrace();
+                return null;
+            }
 
-            throw new IOException("Error parsing GET response.", pe);
+
+            HttpURLConnection connection = 
+                                (HttpURLConnection)url.openConnection();
+            connection.setDoOutput(true);
+            connection.setUseCaches(false);
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("cookie", "reddit_session=" + cookie);
+            connection.setRequestProperty("User-Agent", getUserAgent() );
+
+            try {
+                JSONParser parser = new JSONParser();
+                Object object = 
+                    parser.parse(new BufferedReader(new InputStreamReader(
+                        connection.getInputStream())).readLine());
+
+                // JSONObject jsonObject = (JSONObject) object;
+                // return jsonObject;
+
+                return object;
+
+            } catch(IOException ioe) {
+
+                // Handle 403 ... 
+                //      IOException can be thrown from 
+                //      HttpURLConnection.getInputStream(). 
+                //      This seems to indicate a ban.
+                //
+                
+                String msg = ioe.getMessage();
+                if(msg.indexOf(
+                    "Server returned HTTP response code: 403") != -1) {
+                    throw new BannedUserException(msg);
+                }
+                throw ioe;
+
+            } catch(ParseException pe) {
+                //
+                // pe.printStackTrace();
+    
+                throw new IOException("Error parsing GET response.", pe);
+            }
         }
-      }
     }
 
     /**
@@ -274,6 +310,9 @@ public class Utils {
                     throw new RateLimitException(error + " " + message);
                 }
 
+                if(error.equals("DELETED_COMMENT")) {
+                    throw new DeletedCommentException(error + " " + message);
+                }
     
                 //
                 // TODO There is additional data here. Not sure how to

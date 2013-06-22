@@ -69,6 +69,11 @@ public abstract class Thing {
         // return (String)((JSONObject)(_data.get("data"))).get("kind");
     }
 
+    public String getSubreddit() {
+        return (String)((JSONObject)_data.get("data")).get("subreddit");
+    }
+
+
     /**
      * This class and its subclasses should provide convenience methods for
      * accessing data. But if the underlying
@@ -86,7 +91,8 @@ public abstract class Thing {
         return  indent + "Thing: \n" +
                 indent + "   name: " + getName() + "\n" +
                 indent + "   id:   " + getId()   + "\n" +
-                indent + "   kind: " + getKind() + "\n"; 
+                indent + "   kind: " + getKind() + "\n" +
+                indent + "   subreddit: " + getSubreddit() + "\n"; 
     }
 
 }

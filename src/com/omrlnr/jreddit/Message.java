@@ -30,15 +30,19 @@ public class Message extends Thing {
         return thing + 
             indent + "   Comment:       "   + getBody()     + "\n" +
             indent + "       author:    "   + getAuthor()   + "\n" +
-            indent + "       context:   "   + getContext()   + "\n" +
-            indent + "       parent_id: "   + getParentId()   + "\n" + 
-            indent + "       new:       "   + isNew()   + "\n";
+            indent + "       context:   "   + getContext()  + "\n" +
+            indent + "       parent_id: "   + getParentId() + "\n" + 
+            indent + "       new:       "   + isNew()       + "\n";
             // indent + Utils.getJSONDebugString(_data, indent);
 
     }
 
     public String getBody() { 
         return (String)((JSONObject)_data.get("data")).get("body");
+    }
+
+    public String getSubreddit() { 
+        return (String)((JSONObject)_data.get("data")).get("subreddit");
     }
 
     public String getContext() { 

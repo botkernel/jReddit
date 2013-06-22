@@ -20,6 +20,8 @@ import com.omrlnr.jreddit.utils.Utils;
  */
 public class Messages {
 
+    private static final int LIMIT = 25;
+
     public enum MessageType {
         INBOX,
         UNREAD,
@@ -29,7 +31,7 @@ public class Messages {
     public static List<Message> getMessages( User user ) 
                                                 throws IOException {
 
-        return getMessages( user, MessageType.INBOX );
+        return getMessages( user, MessageType.INBOX, LIMIT );
     }
 
     /**
@@ -42,7 +44,8 @@ public class Messages {
      * @throws IOException      If connection fails
      */
     public static List<Message> getMessages(    User user,
-                                                MessageType messageType) 
+                                                MessageType messageType,
+                                                int limit ) 
                                             throws IOException {
 
         ArrayList<Message> messages = new ArrayList<Message>();
@@ -62,10 +65,15 @@ public class Messages {
         }
         
         urlString += ".json";
+        urlString += "?";
+
+        urlString += "limit=" + limit;
 
         URL url = new URL(urlString);
 
-        JSONObject jsonObject = (JSONObject)Utils.get(url, user.getCookie());
+        JSONObject jsonObject = (JSONObject)Utils.get(
+                                        url, 
+                                        user.getCookie());
 
         //
         // DEBUG

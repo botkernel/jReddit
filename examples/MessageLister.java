@@ -46,11 +46,12 @@ public class MessageLister {
                 return;
             }
             
-            List<Message> messages = Messages.getMessages(user, type);
+            List<Message> messages = Messages.getMessages(user, type, 100);
             for(Message message: messages) {
                 System.out.println(message);
             }
 
+            System.out.println("Handled " + messages.size() + " messages.");
             return;
         }
 
