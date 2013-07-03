@@ -35,7 +35,7 @@ public class Comments {
         String urlString = "http://www.reddit.com/api/info.json?id=" + fullname;
         URL url = new URL(urlString);
 
-        JSONObject obj = (JSONObject)Utils.get(url, user.getCookie());
+        JSONObject obj = (JSONObject)Utils.get(url, user);
         JSONObject data = (JSONObject)obj.get("data");
         JSONArray children = (JSONArray)data.get("children");
        
@@ -99,7 +99,7 @@ public class Comments {
 
         URL url = new URL(urlString);
 
-        JSONArray array = (JSONArray)Utils.get(url, user.getCookie());
+        JSONArray array = (JSONArray)Utils.get(url, user);
         
         if(array.size() > 0) { 
            
@@ -163,7 +163,7 @@ public class Comments {
                 "text=" + text + "&" +
                 "uh=" + user.getModhash(),
             new URL("http://www.reddit.com/api/comment"), 
-            user.getCookie());
+            user );
 
         //
         // DEBUG print the response

@@ -147,7 +147,7 @@ public class Submissions {
         url = new URL(urlString);
 
         JSONObject object = (JSONObject)Utils.get(  url, 
-                                                    user.getCookie());
+                                                    user );
 
         JSONObject data = (JSONObject)object.get("data");
         JSONArray array = (JSONArray)data.get("children");
@@ -205,7 +205,7 @@ public class Submissions {
                             "self" : "link" ) + "&" +
                 "uh=" + user.getModhash(),
             new URL("http://www.reddit.com/api/submit"), 
-            user.getCookie());
+            user );
 
 
         //

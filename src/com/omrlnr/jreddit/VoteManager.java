@@ -55,7 +55,7 @@ public class VoteManager {
                 "id=" + votable.getName() + "&" +
                 "uh=" + user.getModhash(),
             new URL("http://www.reddit.com/api/vote"), 
-            user.getCookie() );
+            user );
 
         //
         // Handle any errors returned.

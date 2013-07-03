@@ -39,32 +39,21 @@ public class Utils {
 
     private static Object lock = new Object();
 
-    private static final String USER_AGENT = 
+    public static final String USER_AGENT = 
                                     "jReddit Java API user agent v0.02";
 
     private static String userAgent = USER_AGENT;
 
-
-    /**
-     *
-     * Set the user agent.
-     *
-     * Would be nice if this wasn't static.
-     * This means all API calls from this JVM instance will use the same
-     * agent string.
-     *
-     */
-    public static void setUserAgent(String agentString) {
-        userAgent = agentString;
+    public static String getUserAgent(User user) {
+        //
+        // If no agent set, supply a default one.
+        //
+        String ret = user.getUserAgent();
+        if(ret == null) {
+            ret = USER_AGENT;
+        }
+        return ret;
     }
-
-    /**
-     * Get the user agent.
-     *
-     * @return The user agent string.
-     *
-     */
-    public static String getUserAgent() { return userAgent; }
 
     /**
      * 
@@ -73,7 +62,7 @@ public class Utils {
      */
     public static JSONObject post(  String apiParams, 
                                     URL url, 
-                                    String cookie )
+                                    User user )
                                         throws IOException {
         synchronized(lock) {
 
@@ -97,8 +86,8 @@ public class Utils {
                 "application/x-www-form-urlencoded; charset=UTF-8");
             connection.setRequestProperty("Content-Length",
                 String.valueOf(apiParams.length()));
-            connection.setRequestProperty("cookie", "reddit_session=" + cookie);
-            connection.setRequestProperty("User-Agent", getUserAgent() );
+            connection.setRequestProperty("cookie", "reddit_session=" + user.getCookie() );
+            connection.setRequestProperty("User-Agent", getUserAgent(user) );
             DataOutputStream wr = 
                         new DataOutputStream(connection.getOutputStream());
 
@@ -144,9 +133,9 @@ public class Utils {
      * This function submits a GET request and returns a JSON object response
      */
     public static Object get(   URL url, 
-                                String cookie)
+                                User user)
                                         throws IOException {
-        return get("", url, cookie);
+        return get("", url, user);
     }
 
     /**
@@ -154,7 +143,7 @@ public class Utils {
      */
     public static Object get(   String apiParams, 
                                 URL url, 
-                                String cookie)
+                                User user)
                                     throws IOException {
         synchronized(lock) {
 
@@ -175,8 +164,8 @@ public class Utils {
             connection.setDoOutput(true);
             connection.setUseCaches(false);
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("cookie", "reddit_session=" + cookie);
-            connection.setRequestProperty("User-Agent", getUserAgent() );
+            connection.setRequestProperty("cookie", "reddit_session=" + user.getCookie());
+            connection.setRequestProperty("User-Agent", getUserAgent(user) );
 
             try {
                 JSONParser parser = new JSONParser();

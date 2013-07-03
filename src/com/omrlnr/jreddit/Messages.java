@@ -80,7 +80,7 @@ public class Messages {
 
         JSONObject jsonObject = (JSONObject)Utils.get(
                                         url, 
-                                        user.getCookie());
+                                        user );
 
         //
         // DEBUG
@@ -128,7 +128,7 @@ public class Messages {
                                     "id=" + fullname + "&" +
                                     "uh=" + user.getModhash(),
                                     url, 
-                                    user.getCookie());
+                                    user );
 
         //
         // DEBUG

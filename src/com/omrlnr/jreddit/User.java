@@ -21,6 +21,7 @@ public class User {
 
 	private String username, password;
 	private String modhash, cookie;
+    private String _agent;
 
 	public User(String username, String password) {
 		this.username = username;
@@ -40,7 +41,6 @@ public class User {
 		this.modhash = hashCookiePair.get(0);
 		this.cookie = hashCookiePair.get(1);
 	}
-
 
 	/**
 	 * This functions returns true if this user has unread mail.
@@ -189,6 +189,12 @@ public class User {
 		return cookie;
 	}
 
+    public void setUserAgent(String agent) {
+        _agent = agent;
+    }
+
+    public String getUserAgent() { return _agent; };
+
 	/**
 	 * This function logs in to reddit and returns an ArrayList containing a
 	 * modhash and cookie.
@@ -208,7 +214,8 @@ public class User {
 		ArrayList<String> values = new ArrayList<String>();
 		JSONObject jsonObject = Utils.post("api_type=json&user=" + username
 				+ "&passwd=" + password, new URL(
-				"http://www.reddit.com/api/login/" + username), getCookie());
+				"http://www.reddit.com/api/login/" + username), 
+                this );
 		JSONObject valuePair = (JSONObject) ((JSONObject) jsonObject
 				.get("json")).get("data");
 
@@ -235,7 +242,7 @@ public class User {
 		JSONObject jsonObject = 
             (JSONObject)Utils.get("", 
                 new URL("http://www.reddit.com/api/me.json"), 
-                getCookie() 
+                this
                 );
 
 		return (JSONObject)jsonObject.get("data");
@@ -260,7 +267,8 @@ public class User {
 		return Utils.post("title=" + title + "&" + (selfPost ? "text" : "url")
 				+ "=" + linkOrText + "&sr=" + subreddit + "&kind="
 				+ (selfPost ? "link" : "self") + "&uh=" + getModhash(),
-				new URL("http://www.reddit.com/api/submit"), getCookie());
+				new URL("http://www.reddit.com/api/submit"), 
+                this );
 	}
 
 }
