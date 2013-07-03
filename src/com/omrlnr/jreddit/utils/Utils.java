@@ -40,7 +40,7 @@ public class Utils {
     private static Object lock = new Object();
 
     public static final String USER_AGENT = 
-                                    "jReddit Java API user agent v0.02";
+                                    "jReddit Java API user agent v0.03";
 
     private static String userAgent = USER_AGENT;
 

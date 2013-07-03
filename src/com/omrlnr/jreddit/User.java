@@ -24,8 +24,13 @@ public class User {
     private String _agent;
 
 	public User(String username, String password) {
+        this(username, password, Utils.USER_AGENT);
+    }
+
+	public User(String username, String password, String agent) {
 		this.username = username;
 		this.password = password;
+        this._agent = agent;
 	}
 
 	/**
