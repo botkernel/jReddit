@@ -1,9 +1,6 @@
 package com.omrlnr.jreddit.utils;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -164,14 +161,49 @@ public class Utils {
             connection.setDoOutput(true);
             connection.setUseCaches(false);
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("cookie", "reddit_session=" + user.getCookie());
-            connection.setRequestProperty("User-Agent", getUserAgent(user) );
+
+            connection.setRequestProperty("cookie", 
+                            "reddit_session=" + user.getCookie());
+            connection.setRequestProperty("User-Agent", user.getUserAgent() );
+          
+
+            // DEBUG
+            // System.out.println("Cookie is " + user.getCookie());
+            // System.out.println("URL is " + url);
+            // System.out.println("apiParams are " + apiParams);
 
             try {
+
                 JSONParser parser = new JSONParser();
-                Object object = 
-                    parser.parse(new BufferedReader(new InputStreamReader(
-                        connection.getInputStream())).readLine());
+
+                InputStream is = connection.getInputStream();
+                InputStream err = connection.getErrorStream();
+
+                InputStreamReader isr = new InputStreamReader(is);
+                BufferedReader br = new BufferedReader(isr);
+                String line = br.readLine();
+                Object object = null;
+
+                if(line != null) {
+                    object = parser.parse(line);
+
+                } else {
+
+                    int responseCode = connection.getResponseCode();
+                    // System.out.println("Error " + responseCode);
+
+                    isr = new InputStreamReader(err);
+                    br = new BufferedReader(isr);
+                    line = br.readLine();
+                           
+                    // System.out.println(
+                    //      "Error " + responseCode + ": " + line);
+                    // while( (line = br.readLine()) != null) {
+                    //    System.out.println("    " + line);
+                    // }
+
+                    return null;
+                }
 
                 // JSONObject jsonObject = (JSONObject) object;
                 // return jsonObject;
@@ -179,6 +211,10 @@ public class Utils {
                 return object;
 
             } catch(IOException ioe) {
+                ioe.printStackTrace();
+                String msg = ioe.getMessage();
+
+                // System.out.println("Error is " + msg);
 
                 // Handle 403 ... 
                 //      IOException can be thrown from 
@@ -186,7 +222,6 @@ public class Utils {
                 //      This seems to indicate a ban.
                 //
                 
-                String msg = ioe.getMessage();
                 if(msg.indexOf(
                     "Server returned HTTP response code: 403") != -1) {
                     throw new BannedUserException(msg);

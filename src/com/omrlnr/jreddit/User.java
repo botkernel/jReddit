@@ -276,4 +276,15 @@ public class User {
                 this );
 	}
 
+    /**
+     *
+     * Return a String representation of this user.
+     *
+     */
+    public String toString() {
+        return  "User: \n" +
+                "       username: " + username + "\n" +
+                "       agent:    " + _agent + "\n";
+    }
+
 }

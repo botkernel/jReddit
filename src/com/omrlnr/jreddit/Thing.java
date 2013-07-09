@@ -64,6 +64,10 @@ public abstract class Thing {
         return (String)((JSONObject)(_data.get("data"))).get("name");
     }
 
+    public String getAuthor() {
+        return (String)((JSONObject)_data.get("data")).get("author");
+    }
+
     public String getKind() {
         return (String)_data.get("kind");
         // return (String)((JSONObject)(_data.get("data"))).get("kind");
