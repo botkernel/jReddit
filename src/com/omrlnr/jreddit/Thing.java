@@ -1,5 +1,7 @@
 package com.omrlnr.jreddit;
 
+import java.util.Date;
+
 import org.json.simple.JSONObject;
 
 
@@ -78,6 +80,25 @@ public abstract class Thing {
     }
 
 
+    public Double getCreatedUTC() {
+        return (Double)((JSONObject)_data.get("data")).get("created_utc");
+    }
+
+    public Date getCreatedDate() {
+        Double d = getCreatedUTC();
+
+        if(d != null) {
+            //
+            // Reddit UTC is seconds since epoch. 
+            // Java uses milliseconds.
+            //
+            return new Date(d.longValue() * 1000);
+        }
+
+        return null;
+    }
+    
+
     /**
      * This class and its subclasses should provide convenience methods for
      * accessing data. But if the underlying
@@ -92,10 +113,13 @@ public abstract class Thing {
     }
 
     public String toString(String indent) {
+
         return  indent + "Thing: \n" +
                 indent + "   name: " + getName() + "\n" +
                 indent + "   id:   " + getId()   + "\n" +
                 indent + "   kind: " + getKind() + "\n" +
+                indent + "   created utc: "     + getCreatedUTC() + "\n" +
+                indent + "   created date: "    + getCreatedDate() + "\n" +
                 indent + "   subreddit: " + getSubreddit() + "\n"; 
     }
 

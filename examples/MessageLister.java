@@ -46,7 +46,7 @@ public class MessageLister {
                 return;
             }
             
-            List<Message> messages = Messages.getMessages(user, type, 100);
+            List<Message> messages = Messages.getMessages(user, type, 10);
             for(Message message: messages) {
                 System.out.println(message);
             }
