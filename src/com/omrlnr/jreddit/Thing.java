@@ -115,12 +115,13 @@ public abstract class Thing {
     public String toString(String indent) {
 
         return  indent + "Thing: \n" +
-                indent + "   name: " + getName() + "\n" +
-                indent + "   id:   " + getId()   + "\n" +
-                indent + "   kind: " + getKind() + "\n" +
-                indent + "   created utc: "     + getCreatedUTC() + "\n" +
-                indent + "   created date: "    + getCreatedDate() + "\n" +
-                indent + "   subreddit: " + getSubreddit() + "\n"; 
+                indent + "   name:  " + getName() + "\n" +
+                indent + "   id:    " + getId()   + "\n" +
+                indent + "   kind:  " + getKind() + "\n" +
+                indent + "   subreddit: " + getSubreddit() + "\n" + 
+                indent + "   author:    " + getSubreddit() + "\n" + 
+                indent + "   created utc:   "   + getCreatedUTC() + "\n" +
+                indent + "   created date:  "   + getCreatedDate() + "\n";
     }
 
 }
