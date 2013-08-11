@@ -125,6 +125,50 @@ public class Comments {
     }
 
     /**
+     * This function returns a list of comments
+     * 
+     * @param user              The user we are using (logged in user.)
+     * @param username          The username of the user for which we are
+     *                          retreiving comment history.
+     *
+     * @return A list containing Comments
+     *
+     * @throws IOException      If connection fails
+     */
+    public static List<Comment> getUserComments(    
+                                                User user,
+                                                String username, 
+                                                int limit )
+                                            throws IOException {
+
+        ArrayList<Comment> comments = new ArrayList<Comment>();
+
+        String urlString =  "http://www.reddit.com/user/" + username + 
+                            "/comments.json";
+        urlString += "?";
+        urlString += "limit=" + limit;
+
+        URL url = new URL(urlString);
+
+        JSONObject object = (JSONObject)Utils.get(url, user);
+       
+        // DEBUG
+        // System.out.println("Returned user comments " + 
+        //                      object.toJSONString());
+
+        JSONObject data = (JSONObject)object.get("data");
+        JSONArray children = (JSONArray)data.get("children");
+
+        for (int i = 0; i < children.size(); i++) {
+            JSONObject jsonData = (JSONObject)children.get(i);
+            comments.add(new Comment(jsonData));
+        }
+
+        return comments;
+    }
+
+
+    /**
      * Submit a comment
      *
      * @param user      A logged in user.

@@ -29,14 +29,25 @@ public class CommentLister {
 
         String username     = args[0];
         String password     = args[1];
-        String article      = args[2];
 
         User user = new User(username, password);
         user.connect();
-        
-        List<Comment> comments = Comments.getComments(
-                                                user, 
+
+        List<Comment> comments = null;
+
+        if(args.length == 3) {
+            String article = args[2];
+            comments = Comments.getComments(    user, 
                                                 article);
+        }
+
+        if(args.length == 4) {
+            String targetuser = args[2];
+            int limit = Integer.parseInt(args[3]);
+            comments = Comments.getUserComments(    user, 
+                                                    targetuser,
+                                                    limit );
+        }
 
         System.out.println("Found comments: " + comments.size());
 
