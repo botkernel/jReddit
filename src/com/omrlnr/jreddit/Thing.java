@@ -119,8 +119,7 @@ public abstract class Thing {
                 indent + "   id:    " + getId()   + "\n" +
                 indent + "   kind:  " + getKind() + "\n" +
                 indent + "   subreddit: " + getSubreddit() + "\n" + 
-                indent + "   author:    " + getSubreddit() + "\n" + 
-                indent + "   created utc:   "   + getCreatedUTC() + "\n" +
+                indent + "   author:    " + getAuthor() + "\n" + 
                 indent + "   created date:  "   + getCreatedDate() + "\n";
     }
 
