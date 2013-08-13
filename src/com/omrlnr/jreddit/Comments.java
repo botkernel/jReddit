@@ -193,11 +193,13 @@ public class Comments {
      * @param fullname  The fullname of a thing we are replying to.
      *                  E.g. a link submission, or a comment.
      * @param text      The text of the reply.
+     *
+     * @return  The id of the posted comment.
      */
-    public static void comment( User user,
-                                String fullname,
-                                String text )
-                                    throws IOException {
+    public static String comment(   User user,
+                                    String fullname,
+                                    String text )
+                                                    throws IOException {
 
         text = URLEncoder.encode(text, "UTF-8");
         
@@ -215,12 +217,62 @@ public class Comments {
         // System.out.println("Comment posted.");
         // System.out.println(Utils.getJSONDebugString(ret));
 
+        JSONObject json = (JSONObject)ret.get("json");
+        JSONObject data = (JSONObject)json.get("data");
+        JSONArray things = (JSONArray)data.get("things");
+        JSONObject jsonData = (JSONObject)things.get(0);
+
+        Thing t = new Thing(jsonData);
+       
+        // DEBUG
+        // System.out.println("Thing " + t);
 
         //
         // Throw any exceptions if necessary.
         //
         Utils.handleResponseErrors(ret);
 
+        //
+        // Return the ID of the posted comment.
+        //
+        return t.getId();
+    }
+
+    /**
+     *
+     * Edit a comment
+     *
+     * @param user      A logged in user.
+     * @param id        The id (fullname) of a thing we are replying to.
+     *                  E.g. a comment id (t1_cbmu8dr)
+     * @param text      The text of the reply.
+     *
+     */
+    public static void editComment( User user,
+                                    String id,
+                                    String text )
+                                                    throws IOException {
+
+        text = URLEncoder.encode(text, "UTF-8");
+        
+        JSONObject ret = Utils.post(
+                "api_type=json" + "&" +
+                "thing_id=" + id + "&" +
+                "text=" + text + "&" +
+                "uh=" + user.getModhash(),
+            new URL("http://www.reddit.com/api/editusertext"), 
+            user );
+
+        //
+        // DEBUG print the response
+        //
+        // System.out.println("Comment edited.");
+        // System.out.println(Utils.getJSONDebugString(ret));
+
+        //
+        // Throw any exceptions if necessary.
+        //
+        Utils.handleResponseErrors(ret);
 
     }
 

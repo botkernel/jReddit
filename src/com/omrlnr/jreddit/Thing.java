@@ -16,7 +16,7 @@ import org.json.simple.JSONObject;
  * @author <a href="https://github.com/jasonsimpson">Jason Simpson</a>
  *
  */
-public abstract class Thing {
+public class Thing {
 
     //
     // Possible values for kind returned, by getKind()

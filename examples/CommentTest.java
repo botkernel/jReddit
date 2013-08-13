@@ -14,15 +14,29 @@ public class CommentTest {
 
         String username     = args[0];
         String password     = args[1];
-        String thingId      = args[2];
-        String text         = args[3];
+
+        String op           = args[2];
+        String thingId      = args[3];
+        String text         = args[4];
 
         User user = new User(username, password);
         user.connect();
    
-        Comments.comment( user,
-                          thingId,
-                          text );
+        if(op.equals("post")) {
+
+            String id = Comments.comment(   user,
+                                            thingId,
+                                            text );
+        
+            System.out.println("Posted " + id);
+
+        } else if(op.equals("edit")) {
+
+            Comments.editComment(   user,
+                                    thingId,
+                                    text );
+        
+        }
 
     }
 
