@@ -37,8 +37,10 @@ public class CommentLister {
 
         if(args.length == 3) {
             String article = args[2];
-            comments = Comments.getComments(    user, 
-                                                article);
+            Comment comment = Comments.getComment(  user, 
+                                                    article);
+            System.out.println("Comment: " + comment);
+            return;
         }
 
         if(args.length == 4) {

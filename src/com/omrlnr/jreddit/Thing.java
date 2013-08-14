@@ -66,6 +66,10 @@ public class Thing {
         return (String)((JSONObject)(_data.get("data"))).get("name");
     }
 
+    public String getUrl() {
+        return (String)((JSONObject)_data.get("data")).get("url");
+    }
+
     public String getAuthor() {
         return (String)((JSONObject)_data.get("data")).get("author");
     }
@@ -115,12 +119,13 @@ public class Thing {
     public String toString(String indent) {
 
         return  indent + "Thing: \n" +
-                indent + "   name:  " + getName() + "\n" +
-                indent + "   id:    " + getId()   + "\n" +
-                indent + "   kind:  " + getKind() + "\n" +
+                indent + "   name:      " + getName() + "\n" +
+                indent + "   id:        " + getId()   + "\n" +
+                indent + "   kind:      " + getKind() + "\n" +
                 indent + "   subreddit: " + getSubreddit() + "\n" + 
+                indent + "   url:       " + getUrl() + "\n" +
                 indent + "   author:    " + getAuthor() + "\n" + 
-                indent + "   created date:  "   + getCreatedDate() + "\n";
+                indent + "   created:   " + getCreatedDate() + "\n";
     }
 
 }

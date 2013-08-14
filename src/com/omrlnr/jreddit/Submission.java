@@ -22,7 +22,7 @@ public class Submission extends Thing implements Votable {
         return thing +
                 "   Submission:   "   + getTitle()        + "\n" +
                 "       author:   "   + getAuthor()       + "\n" +
-                "       url:      "   + getUrl()          + "\n" +
+                // "       url:      "   + getUrl()          + "\n" +
                 "       score:    "   + getScore() + 
                                         " (" 
                                             + getUpVotes() + "/" 
