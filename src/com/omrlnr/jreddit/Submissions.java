@@ -62,6 +62,41 @@ public class Submissions {
     };
 
     /**
+     * This function returns a single submission, given a fullname
+     *
+     * @param user              The user
+     * @param fullname          The fullname of the submission.
+     *
+     * @return The submission with the specified fullname
+     *
+     */
+    public static Submission getSubmission(User user, String fullname)
+                                                        throws IOException {
+
+        String urlString = "http://www.reddit.com/api/info.json?id=" + fullname;
+        URL url = new URL(urlString);
+        
+
+        JSONObject obj = (JSONObject)Utils.get(url, user);
+        JSONObject data = (JSONObject)obj.get("data");
+        JSONArray children = (JSONArray)data.get("children");
+      
+        // Debug
+        // System.out.println(Utils.getJSONDebugString(obj));
+
+        //
+        // Not sure why this can be empty sometimes...
+        //
+        if(children.size() > 0) {
+            JSONObject jsonData = (JSONObject)children.get(0);
+            return new Submission(jsonData);
+        }
+
+        return null;
+    }
+
+
+    /**
      * This function returns a list containing the submissions on a given
      * subreddit and page. 
      * 

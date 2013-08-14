@@ -44,6 +44,20 @@ public class SubmissionLister {
 
         String username     = args[0];
         String password     = args[1];
+
+        User user = new User(username, password);
+        user.connect();
+
+        if(args.length == 3) {
+           
+            String fullname = args[2];
+            Submission submission = 
+                Submissions.getSubmission(  user,
+                                            fullname );
+            System.out.println("Submission: " + submission);
+            return;
+        }
+
         String subreddit    = args[2];
         String typeStr      = args[3];
 
@@ -67,8 +81,6 @@ public class SubmissionLister {
             after = args[5];
         }
 
-        User user = new User(username, password);
-        user.connect();
         
         ListingType type = TYPE_MAP.get(typeStr);
         if(type == null) {
