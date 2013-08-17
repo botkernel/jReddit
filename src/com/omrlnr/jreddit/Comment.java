@@ -56,6 +56,21 @@ public class Comment extends Thing implements Votable {
         return (String)((JSONObject)_data.get("data")).get("parent_id");
     }
 
+    public String getLinkId() { 
+        return (String)((JSONObject)_data.get("data")).get("link_id");
+    }
+
+    //
+    // This is hacky, but for some reason comments do not have a url
+    // property, so we need to synthesize it.
+    //
+    public String getUrl() {
+        String submissionId = getLinkId();
+        submissionId = submissionId.split("_")[1];
+
+        return  "http://www.reddit.com/r/" + getSubreddit() + 
+                "/comments/" +  submissionId + "/x/" + getId();
+    }
 
     //
     // Methods for implementing Votable.
