@@ -216,6 +216,11 @@ public class Comments {
         //
         // System.out.println("Comment posted.");
         // System.out.println(Utils.getJSONDebugString(ret));
+       
+        //
+        // Throw any exceptions if necessary.
+        //
+        Utils.handleResponseErrors(ret);
 
         JSONObject json = (JSONObject)ret.get("json");
         JSONObject data = (JSONObject)json.get("data");
@@ -227,12 +232,7 @@ public class Comments {
         // DEBUG
         // System.out.println("Thing " + t);
 
-        //
-        // Throw any exceptions if necessary.
-        //
-        Utils.handleResponseErrors(ret);
-
-        //
+         //
         // Return the ID of the posted comment.
         //
         return t.getId();
