@@ -37,6 +37,10 @@ public class Message extends Thing {
 
     }
 
+    public String getSubject() { 
+        return (String)((JSONObject)_data.get("data")).get("subject");
+    }
+
     public String getBody() { 
         return (String)((JSONObject)_data.get("data")).get("body");
     }
