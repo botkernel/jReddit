@@ -178,11 +178,12 @@ public class Comments {
      * @param text      The text of the reply.
      *
      */
-    public static void comment( User user,
-                                Thing thing,
-                                String text )
+    public static String comment(   User user,
+                                    Thing thing,
+                                    String text )
+
                                     throws IOException {
-        comment(user, thing.getName(), text);
+        return comment(user, thing.getName(), text);
     }
 
     /**
